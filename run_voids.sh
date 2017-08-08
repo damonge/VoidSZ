@@ -57,9 +57,7 @@ echo "Download BOSS data"
 #cd ..
 
 echo "Reforming data"
-#cd data
-#python mkfits.py
-#cd ../
+python mkfits.py
 
 echo "Compute y stacks"
 #fname_y=data/data_y/milca_ymaps.fits
@@ -103,3 +101,4 @@ python voidprof.py
 <<COMMENT
 echo "Compute theoretical y stack"
 python voidth.py
+COMMENT
