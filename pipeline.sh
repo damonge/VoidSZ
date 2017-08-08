@@ -163,6 +163,11 @@ if [ ! -f data/profiles.txt ] ; then
     python voidprof.py
 fi
 
+echo "Compute CIB leakage"
+if [ ! -f data/data_y/y_contamination.txt ] ; then
+    python compute_leakage.py
+fi
+
 <<COMMENT
 echo "Compute theoretical y stack"
 python voidth.py
