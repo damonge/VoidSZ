@@ -1,0 +1,169 @@
+#!/bin/bash
+
+echo "Download y data"
+mkdir -p data
+cd data/
+#Y maps
+if [ ! -f data_y/milca_ymaps.fits ] ; then
+    echo " Downloading Y maps"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/component-maps/foregrounds/COM_CompMap_YSZ_R2.00.fits.tgz
+    tar -xvf COM_CompMap_YSZ_R2.00.fits.tgz
+    mv COM_CompMap_YSZ_R2.00.fits data_y
+    rm COM_CompMap_YSZ_R2.00.fits.tgz
+    cd data_y/
+    rm MILCA_Csz_* nilc_weights_*
+    cd ../
+fi
+cd data_y/
+#Masks
+if [ ! -f HFI_Mask_GalPlane-apo0_2048_R2.00.fits ] ; then
+    echo " Downloading galatic mask" 
+   wget irsa.ipac.caltech.edu/data/Planck/release_2/ancillary-data/masks/HFI_Mask_GalPlane-apo0_2048_R2.00.fits
+fi
+if [ ! -f LFI_Mask_PointSrc_2048_R2.00.fits ] ; then
+    echo " Downloading LFI PS mask"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/ancillary-data/masks/LFI_Mask_PointSrc_2048_R2.00.fits
+fi
+if [ ! -f HFI_Mask_PointSrc_2048_R2.00.fits ] ; then
+    echo " Downloading HFI PS mask"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/ancillary-data/masks/HFI_Mask_PointSrc_2048_R2.00.fits
+fi
+if [ ! -f mask.fits ] ; then
+    echo " Downloading combined mask"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/component-maps/lensing/COM_CompMap_Lensing_2048_R2.00.tar
+    tar -xvf COM_CompMap_Lensing_2048_R2.00.tar
+    cd data
+    gunzip mask.fits.gz
+    mv mask.fits ..
+    cd ..
+    rm -r data
+    rm COM_CompMap_Lensing_2048_R2.00.tar
+fi
+#545 map
+cd ../
+if [ ! -f HFI_SkyMap_545_2048_R2.02_full.fits ] ; then
+    echo " Downloading 545 map"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/HFI_SkyMap_545_2048_R2.02_full.fits
+fi
+cd ../
+
+echo "Download BOSS data"
+cd data
+echo " Void catalogs"
+if [ ! -f voids_BOSS_cmass_dr12v4_ngc_Om0.3_dt0.5.dat ] ; then
+    wget http://lss.phy.vanderbilt.edu/voids/files/DR12/voids_BOSS_cmass_dr12v4_ngc_Om0.3_dt0.5.dat
+fi
+if [ ! -f voids_BOSS_cmass_dr12v4_ngc_Om0.3_dt0.5_uncut.dat ] ; then
+    wget http://lss.phy.vanderbilt.edu/voids/files/DR12/voids_BOSS_cmass_dr12v4_ngc_Om0.3_dt0.5_uncut.dat
+fi
+if [ ! -f voids_BOSS_cmass_dr12v4_sgc_Om0.3_dt0.5.dat ] ; then
+    wget http://lss.phy.vanderbilt.edu/voids/files/DR12/voids_BOSS_cmass_dr12v4_sgc_Om0.3_dt0.5.dat
+fi
+if [ ! -f voids_BOSS_cmass_dr12v4_sgc_Om0.3_dt0.5_uncut.dat ] ; then
+    wget http://lss.phy.vanderbilt.edu/voids/files/DR12/voids_BOSS_cmass_dr12v4_sgc_Om0.3_dt0.5_uncut.dat
+fi
+if [ ! -f voids_BOSS_lowz_dr12v4_ngc_Om0.3_dt0.5.dat ] ; then
+    wget http://lss.phy.vanderbilt.edu/voids/files/DR12/voids_BOSS_lowz_dr12v4_ngc_Om0.3_dt0.5.dat
+fi
+if [ ! -f voids_BOSS_lowz_dr12v4_ngc_Om0.3_dt0.5_uncut.dat ] ; then
+    wget http://lss.phy.vanderbilt.edu/voids/files/DR12/voids_BOSS_lowz_dr12v4_ngc_Om0.3_dt0.5_uncut.dat
+fi
+if [ ! -f voids_BOSS_lowz_dr12v4_sgc_Om0.3_dt0.5.dat ] ; then
+    wget http://lss.phy.vanderbilt.edu/voids/files/DR12/voids_BOSS_lowz_dr12v4_sgc_Om0.3_dt0.5.dat
+fi
+if [ ! -f voids_BOSS_lowz_dr12v4_sgc_Om0.3_dt0.5_uncut.dat ] ; then
+    wget http://lss.phy.vanderbilt.edu/voids/files/DR12/voids_BOSS_lowz_dr12v4_sgc_Om0.3_dt0.5_uncut.dat
+fi
+echo " Void mocks"
+if [ ! -f mocks/voids_QPM_a0.6452_dr12c_0500_cmass_ngc_zspace_Om0.3_dt0.5.dat ] ; then
+    wget lss.phy.vanderbilt.edu/voids/files/Mocks/QPM_mock_voids_rspace.tar.gz
+    wget lss.phy.vanderbilt.edu/voids/files/Mocks/QPM_mock_voids_zspace.tar.gz
+    tar -xvf QPM_mock_voids_zspace.tar.gz
+    mkdir -p mocks
+    mv voids_QPM_* mocks
+    rm QPM_mock_voids_rspace.tar.gz QPM_mock_voids_zspace.tar.gz
+fi
+echo " Galaxy catalogs"
+if [ ! -f galaxy_DR12v5_CMASS_North.fits ] ; then
+    wget https://data.sdss.org/sas/dr12/boss/lss/galaxy_DR12v5_CMASS_North.fits.gz
+    gunzip galaxy_DR12v5_CMASS_North.fits.gz
+fi
+if [ ! -f galaxy_DR12v5_CMASS_South.fits ] ; then
+    wget https://data.sdss.org/sas/dr12/boss/lss/galaxy_DR12v5_CMASS_South.fits.gz
+    gunzip galaxy_DR12v5_CMASS_South.fits.gz
+fi
+if [ ! -f galaxy_DR12v5_LOWZ_North.fits ] ; then
+    wget https://data.sdss.org/sas/dr12/boss/lss/galaxy_DR12v5_LOWZ_North.fits.gz
+    gunzip galaxy_DR12v5_LOWZ_North.fits.gz
+fi
+if [ ! -f galaxy_DR12v5_LOWZ_South.fits ] ; then
+    wget https://data.sdss.org/sas/dr12/boss/lss/galaxy_DR12v5_LOWZ_South.fits.gz
+    gunzip galaxy_DR12v5_LOWZ_South.fits.gz
+fi
+echo " Galaxy randoms"
+if [ ! -f random0_DR12v5_CMASS_North.fits ] ; then
+    wget https://data.sdss.org/sas/dr12/boss/lss/random0_DR12v5_CMASS_North.fits.gz
+    gunzip random0_DR12v5_CMASS_North.fits.gz
+fi
+if [ ! -f random0_DR12v5_CMASS_South.fits ] ; then
+    wget https://data.sdss.org/sas/dr12/boss/lss/random0_DR12v5_CMASS_South.fits.gz
+    gunzip random0_DR12v5_CMASS_South.fits.gz
+fi
+cd ..
+
+echo "Reforming data"
+if [ ! -f data/data_y/mask_planck80.fits ] ; then
+    python mkfits.py
+fi
+
+echo "Compute stacks"
+if [ ! -f output_voids_milca_15/wth_mock_0632.txt ] ; then
+    echo " MILCA stacks"
+    fname_y=data/data_y/milca_ymaps.fits
+    fname_msk=data/data_y/mask.fits
+    fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
+    prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
+    suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
+    prefix_out=output_voids_milca
+    addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
+fi
+if [ ! -f output_voids_null_15/wth_mock_0632.txt ] ; then
+    echo " NULL stacks"
+    fname_y=data/data_y/y_null_milca.fits
+    fname_msk=data/data_y/mask.fits
+    fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
+    prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
+    suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
+    prefix_out=output_voids_null
+    addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
+fi
+if [ ! -f output_voids_545_15/wth_mock_0632.txt ] ; then
+    echo " 545 stacks"
+    fname_y=data/HFI_SkyMap_545_2048_R2.02_full.fits
+    fname_msk=data/data_y/mask.fits
+    fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
+    prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
+    suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
+    prefix_out=output_voids_545
+    addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
+fi
+if [ ! -f output_voids_nilc_15/wth_mock_0632.txt ] ; then
+    echo " NILC stacks"
+    fname_y=data/data_y/nilc_ymaps.fits
+    fname_msk=data/data_y/mask.fits
+    fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
+    prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
+    suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
+    prefix_out=output_voids_nilc
+    addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
+fi
+
+echo "Compute 3D void profile"
+if [ ! -f data/profiles.txt ] ; then
+    python voidprof.py
+fi
+
+<<COMMENT
+echo "Compute theoretical y stack"
+python voidth.py
+COMMENT
