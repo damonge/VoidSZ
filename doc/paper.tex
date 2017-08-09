@@ -1,0 +1,113 @@
+\documentclass[twocolumn,amsfont,amssymb,amsmath, showpacs,balancelastpage, nofootinbib]{revtex4-1}
+\pdfoutput=1
+
+\usepackage{graphicx}
+\usepackage{dcolumn}
+\usepackage{bm}
+\usepackage{amssymb,amsmath,bm}  
+\usepackage{color}
+\usepackage[colorlinks,linkcolor=red,citecolor=blue,urlcolor=blue ]{hyperref}
+\usepackage{multirow}
+\usepackage[utf8]{inputenc}
+\usepackage{balance}
+\usepackage{enumitem}
+\usepackage{lipsum}
+\newcommand{\nv}{\hat{\bf n}}
+\newcommand{\kalo}{Karhunen-Lo\`{e}ve\,}
+\newcommand{\jcap}{JCAP}
+\newcommand{\mnras}{MNRAS}
+\newcommand{\aap}{A\&A}
+\newcommand{\aaps}{A\&AS}
+\newcommand{\apjs}{ApJS}
+\newcommand{\apjl}{ApJL}
+\newcommand{\aj}{Astron. Journal}
+\newcommand{\pasp}{Publications of the ASP}
+\newcommand{\nar}{New Astronomy Review}
+\newcommand{\procspie}{Proceedings of the SPIE}
+\newcommand{\physrep}{Physics Reports}
+
+\begin{document}
+  \title{The Sunyaev-Zel'dovich effect around voids}
+  \author{All of us$^1$}
+  \affiliation{$^{1}$Miskatonic University}
+
+  \begin{abstract}
+    \lipsum[0]
+  \end{abstract}
+
+  \maketitle
+
+  \section{Introduction}\label{sec:intro}
+    \lipsum[1]
+    
+  \section{Theoretical model}\label{sec:theory}
+    The tSZ signal caused by a particular structure at redshift $z$ is given by
+    \begin{equation}
+      y(\theta)=\frac{\sigma_T}{m_e\,c^2}\int\frac{dr_\parallel}{1+z}P_e\left(\sqrt{r_\parallel^2+r_\perp^2}\right),
+    \end{equation}
+    where $\sigma_T$ and $m_e$ are the Thomson scattering cross section and the electron mass, $P_e(r)$ is
+    the electron pressure profile of the structure, $r_\parallel$ and $r_\perp\equiv \chi(z)\theta$ are
+    the longitudinal (parallel to the line of sight) and transverse comoving distances from the structure,
+    $\chi(z)$ is the comoving distance to redshift $z$ and $\theta$ is the angular separation from the
+    center of the projected structure.
+
+    The tSZ signal around voids can therefore be predicted by estimating their expected excess electron pressure
+    profile. We do so here by connecting the void density profile, which can be estimated directly from the data,
+    with $P_e(r)$ using the so-called ``effective universe'' approach. This method is spelled out in Appendix
+    \ref{app:effu}, and has been previously used in analyses of environmental effects on halo abundances \cite{2003MNRAS.344..715G,2004ApJ...605....1G,2009MNRAS.394.2109M,2015MNRAS.447.2683A}). In short, one can
+    associate the void underdensity $\delta(r)$ with a set of effective cosmological parameters $\Omega_X(r)$,
+    which can then be used to estimate any quantity in the void as its background value in that effective
+    cosmology.
+    
+    The problem therefore reduces to estimating the background free electron pressure for a given set of
+    cosmological parameters. Assuming the main contribution to the total tSZ signal comes from the hot gas in
+    dark matter haloes, the total electron pressure at a point ${\bf r}$ is given by the sum of the contributions
+    from all haloes:
+    \begin{align}
+      P_e({\bf r})=\int d{\bf x}^3\,dM\,n(M,{\bf x})P_e(|{\bf x}-{\bf r}|,M),
+    \end{align}
+    where $n(M,{\bf x})$ is the number density of haloes of mass $M$ (i.e. the position-dependent halo mass
+    function), with pressure profile $P_e(r,M)$. The background contribution to the electron pressure is
+    therefore found by taking the ensemble average of the equation above:
+    \begin{equation}\label{eq:pe_bg}
+      \langle P_e \rangle=\int dM\,n(M)\frac{4\pi}{3}\int dr\,r^2\,P_e(r,M).
+    \end{equation}
+    
+    To summarize, the process to estimate the void's electron pressure profile is therefore as follows:
+    \begin{enumerate}
+      \item Estimate the void's over-density profile $\delta(r)$.
+      \item At a given $r$, relate $\delta(r)$ to a set of effective cosmological parameters $\Omega_X(r)$.
+      \item The void's electron pressure at that $r$ is then computed using Eq. \ref{eq:pe_bg} as the
+            background electron pressure for the corresponding effective cosmology parameters. Note that,
+            in this equation, both the mass function and the halo pressure profile depend on $\Omega_X$.
+    \end{enumerate}
+
+
+
+
+  \section{Data}\label{sec:data}
+    \lipsum[3]
+
+  \section{Results}\label{sec:results}
+    \lipsum[4]
+
+  \section{Discussion}\label{sec:discussion}
+    \lipsum[4]
+  
+    \cite{2017JCAP...07..014H}
+    \cite{2017MNRAS.469..787P}
+    \cite{2014PhRvL.112y1302H}
+    \cite{2014MNRAS.442..462S}
+    \cite{2016IAUS..308..542N}
+
+\section*{Acknowledgements}
+  \lipsum[5]
+  
+\bibliography{paper}
+
+\appendix
+\onecolumngrid
+\section{The effective-universe approach to void-related quantities}\label{app:effu}
+  \lipsum[6]
+
+\end{document}
