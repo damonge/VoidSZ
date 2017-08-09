@@ -70,8 +70,8 @@ for w in data_milca['w_1d_sims'] :
     ax.plot(data_milca['x'],w-data_milca['w_1d_mean'],'-',color='b',lw=2,alpha=0.1)
 ax.errorbar(data_milca['x'],data_milca['w_1d_data']-data_milca['w_1d_mean'],
              yerr=data_milca['w_1d_error'],fmt='r-',lw=2,elinewidth=2,label='$y_{\\rm data}$')
-ax.plot(x_th_f,w_th_f*st_milca['a_bf'],'k-',lw=2,label='$y_{\\rm theory},\\,\\,{\\rm scaled}$')
-ax.plot(x_th_f,w_th_f                 ,'k--',lw=2)#,label='y_{\\rm theory},\\,\\,{\\rm scaled}')
+ax.plot(x_th_f,w_th_f                 ,'k--',lw=2,label='$y_{\\rm theory}$')
+ax.plot(x_th_f,w_th_f*st_milca['a_bf'],'k-',lw=2,label='${\\rm Scaled\\,\\,theory}$')
 ax.plot(data_545['x'],(data_545['w_1d_data']-data_545['w_1d_mean'])*s_alpha_cib,'y-',lw=2,label='${\\rm CIB\\,\\,leakage}$')
 ax.set_ylim([-7.5E-8,7.5E-8])
 ax.set_xlim([data_milca['x'][0],2])
@@ -81,7 +81,7 @@ for tick in ax.xaxis.get_major_ticks():
     tick.label.set_fontsize(12)
 for tick in ax.yaxis.get_major_ticks():
     tick.label.set_fontsize(12)
-plt.legend(loc='lower right',frameon=False,fontsize=14)
+plt.legend(loc='lower right',frameon=False,fontsize=14,ncol=2)
 plt.savefig("doc/y_result.pdf",bbox_inches='tight')
 plt.show()
 
