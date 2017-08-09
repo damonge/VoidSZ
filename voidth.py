@@ -19,10 +19,12 @@ NLM=64
 B_CMASS=2.
 Z_EFF=0.5
 
+#Cosmological parameters outside the voide
 pcs_BG0=csm.PcsPar()
 pcs_BG0.unset_gsl_eh()
 pcs_BG0.background_set(OM0,1-OM0,OM0*FB0,-1.,0.,HH0,2.7255)
-dgrowth0=pcs_BG0.growth_factor(1.)
+dgrowth0=pcs_BG0.growth_factor(1.) #Normalization of the growth factor
+#Factor needed to scale the void profile at z=Z_EFF to z=0
 scale_delta=B_CMASS*pcs_BG0.growth_factor(1./(1+Z_EFF))/dgrowth0
 
 def rDelta(m,z,Delta,cpar) :
@@ -91,7 +93,6 @@ def get_pz(om,ol,ob,hh) :
     pzarr=np.zeros_like(zarr)
     for iz,z in enumerate(zarr) :
         zeff=get_zeff(om,ol,1-om-ol,hh,z) #Equivalent redshift in the effective Universe
-        print " %lf %lf"%(zeff,z)
         nmarr=np.zeros_like(marr)
         for im,m in enumerate(marr) :
             bp=get_battaglia(m,zeff,cospar)
@@ -113,16 +114,16 @@ data_sgc_cut=np.genfromtxt('data/voids_BOSS_cmass_dr12v4_sgc_Om0.3_dt0.5.dat',
                                   'delta_core','delta_void','prob','R_edge'])
 data_cut=np.hstack((data_ngc_cut,data_sgc_cut))
 rv_mean=np.mean(data_cut['Reff']/(1+data_cut['z']))
-print rv_mean
+print "Mean void scale : %.3lf Mpc/h"%rv_mean
 
 #Read 3D void profile
 dum,r,dum,dum,dum,d=np.loadtxt("data/profiles.txt",unpack=True)
 rarrt=np.zeros(len(r)+1); rarrt[1:]=r
 darrt=np.zeros(len(d)+1); darrt[0]=d[0]*0.9; darrt[1:]=d
 
-deltaf=interp1d(rarrt,darrt-1,bounds_error=False,fill_value=0,kind='cubic')
+#deltaf=interp1d(rarrt,darrt-1,bounds_error=False,fill_value=0,kind='cubic')
 rarr=np.linspace(0.,5.,150)
-deltarr=deltaf(rarr)
+deltaf=interp1d(rarrt,(darrt-1)/scale_delta,bounds_error=False,fill_value=0)
 
 #Compute tBB for background cosmology
 def tintg0(x) :
@@ -169,22 +170,22 @@ harr=HH0*np.sqrt(eta2arr) #Effective expansion rate
 parr=np.zeros_like(harr) #This will hold mean electron pressure(r)
 for i in np.arange(len(parr)) :
     parr[i]=get_pz(omarr[i],olarr[i],FB0*omarr[i],harr[i])
-    print i,rarr[i],parr[i]
 parr*=harr/harr[-1] #Correct for h-inverse units
 parr-=parr[-1] #Subtract background (which we don't measure)
 
+#Integrate pressure profile along the line of sight
 pf=interp1d(rarr,parr,bounds_error=False,fill_value=parr[-1])
 def integ_project(rl,rt) :
     r=np.sqrt(rl**2+rt**2)
     return pf(r)
-pparr=np.array([2*itg.quad(integ_project,0.,5.,args=(r,))[0] for r in rarr])
+pparr=np.array([2*itg.quad(integ_project,0.,5.,args=(r,))[0] for r in rarr])*rv_mean
 
-np.savetxt("void_univ_eff.txt",np.transpose([rarr,delta_fit(rarr),omarr,olarr,okarr,harr]))
-np.savetxt("y_th_void.txt",np.transpose([rarr,rv_mean*pparr,rv_mean*parr]))
+np.savetxt("data/data_y/void_univ_eff.txt",np.transpose([rarr,delta_fit(rarr),omarr,olarr,okarr,harr]))
+np.savetxt("data/data_y/y_th_void.txt",np.transpose([rarr,pparr,rv_mean*parr]))
 
 plt.figure(); plt.xlim([0,2]); plt.plot(rarrt,(darrt-1)/scale_delta+1); plt.plot(rarr,1+delta_fit(rarr));
 plt.figure(); plt.xlim([0,5]); plt.plot(rarr,omarr,'r-'); plt.plot(rarr,olarr,'g-'); plt.plot(rarr,okarr,'y-')
 plt.figure(); plt.xlim([0,2]); plt.plot(rarr,harr)
-plt.figure(); plt.plot(rarr,rv_mean*parr,'r--'); plt.plot(rarr,rv_mean*pparr,'r-');
+plt.figure(); plt.plot(rarr,rv_mean*parr,'r--'); plt.plot(rarr,pparr,'r-');
 plt.xlim([0,2]); plt.ylim([-7E-8,7E-8])
 plt.show()

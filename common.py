@@ -35,6 +35,7 @@ def get_run_stats(prefix,nx,na,nsims) :
         w_1d_covar=np.mean(w_1d_ms[:,:,None]*w_1d_ms[:,None,:],axis=0)-w_1d_mean[:,None]*w_1d_mean[:,None]
         np.savez(fname_stats,x=x_d,alpha=a_d,
                  w_2d_data=w_2d_d,w_2d_mean=w_2d_mean,w_2d_error=w_2d_std,
-                 w_1d_data=w_1d_d,w_1d_mean=w_1d_mean,w_1d_error=w_1d_std,w_1d_covar=w_1d_covar)
-        
+                 w_1d_data=w_1d_d,w_1d_mean=w_1d_mean,w_1d_error=w_1d_std,w_1d_covar=w_1d_covar,
+                 w_2d_sims=w_2d_ms,w_1d_sims=w_1d_ms)
+
     return np.load(fname_stats+".npz")

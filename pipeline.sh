@@ -168,6 +168,11 @@ if [ ! -f data/data_y/y_contamination.txt ] ; then
     python compute_leakage.py
 fi
 
+echo "Compute theory prediction"
+if [ ! -f data/data_y/y_th_void.txt ] ; then
+    python voidth.py
+fi
+
 <<COMMENT
 echo "Compute theoretical y stack"
 python voidth.py
