@@ -9,7 +9,8 @@ prefix_mocks    =sys.argv[4]
 suffix_mocks    =sys.argv[5]
 prefix_out      =sys.argv[6]
 
-for n in [15,20,30] :
+#for n in [15,20,30] :
+for n in [20] :
     print n
     dirname=prefix_out+"_%d"%n
     os.system("mkdir -p "+dirname)
@@ -22,5 +23,6 @@ for n in [15,20,30] :
         fname_wth=dirname+"/wth_mock_"+a+".txt"
         fname_log=dirname+"/wth_mock_"+a+".log"
         print fname_cat
-        os.system("./FieldXCorr "+fname_y+" "+fname_msk+" "+fname_cat+" "+fname_wth+
-                  " 3 %d 0 0. NO_WEIGHT NO_CUT theta_eff 1 > "%n+fname_log)
+        if not os.path.isfile(fname_wth) :
+            os.system("./FieldXCorr "+fname_y+" "+fname_msk+" "+fname_cat+" "+fname_wth+
+                      " 3 %d 0 0. NO_WEIGHT NO_CUT theta_eff 1 > "%n+fname_log)

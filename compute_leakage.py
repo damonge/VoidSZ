@@ -8,19 +8,21 @@ import os
 nside=2048
 n_rb=32
 lmax=1000
-lmin=50
+lmin=300
 
-def get_cells(fsky_mask) :
-    fname_cls="data/cls_A%d.txt"%fsky_mask
+fs_analyze="20"
+def get_cells() :
+    fname_cls="data/cls_A"+fs_analyze+".txt"
 
     if os.path.isfile(fname_cls) :
         leff,cl_cc,cl_cy,cl_yy=np.loadtxt(fname_cls,unpack=True)
     else :
         mp_545=hp.read_map("data/HFI_SkyMap_545_2048_R2.02_full.fits",verbose=False)*1E6
         mp_y=hp.read_map("data/data_y/milca_ymaps.fits",verbose=False)
-        msk=hp.read_map("data/data_y/mask_planck%d.fits"%fsky_mask,verbose=False)
+        msk=hp.read_map("data/data_y/mask_planck"+fs_analyze+".fits",verbose=False)
         
         fsk=np.mean(msk)
+        print fsk
         print "cc"
         cl_cc=hp.anafast(mp_545*msk,map2=mp_545*msk,iter=0)/fsk
         print "cy"
@@ -98,10 +100,10 @@ def ciby(l) :
 def rebin(a) :
     return np.mean(a.reshape([len(a)/n_rb,n_rb]),axis=1)
 
-msk=hp.read_map("data/data_y/mask_planck80.fits",verbose=False)
+msk=hp.read_map("data/data_y/mask_planck"+fs_analyze+".fits",verbose=False)
 fsky=np.mean(msk)
 
-l80,cl_cc80,cl_cy80,cl_yy80=get_cells(80)
+l80,cl_cc80,cl_cy80,cl_yy80=get_cells()
 beam_y=np.exp(-0.5*l80*(l80+1)*(10./2.355*(np.pi/180./60.))**2)
 beam_c=np.exp(-0.5*l80*(l80+1)*(5./2.355*(np.pi/180./60.))**2)
 l80_b=rebin(l80); cl_cc80_b=rebin(cl_cc80); cl_cy80_b=rebin(cl_cy80); cl_yy80_b=rebin(cl_yy80)

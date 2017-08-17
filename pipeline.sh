@@ -28,16 +28,10 @@ if [ ! -f HFI_Mask_PointSrc_2048_R2.00.fits ] ; then
     echo " Downloading HFI PS mask"
     wget irsa.ipac.caltech.edu/data/Planck/release_2/ancillary-data/masks/HFI_Mask_PointSrc_2048_R2.00.fits
 fi
-if [ ! -f mask.fits ] ; then
-    echo " Downloading combined mask"
-    wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/component-maps/lensing/COM_CompMap_Lensing_2048_R2.00.tar
-    tar -xvf COM_CompMap_Lensing_2048_R2.00.tar
-    cd data
-    gunzip mask.fits.gz
-    mv mask.fits ..
-    cd ..
-    rm -r data
-    rm COM_CompMap_Lensing_2048_R2.00.tar
+if [ ! -f HFI_PCCS_SZ-union_R2.08.fits ] ; then
+    echo " Downloading HFI SZ catalog"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/catalogs/HFI_PCCS_SZ-union_R2.08.fits.gz
+    gunzip HFI_PCCS_SZ-union_R2.08.fits.gz
 fi
 #545 map
 cd ../
@@ -112,49 +106,44 @@ fi
 cd ..
 
 echo "Reforming data"
-if [ ! -f data/data_y/mask_planck80.fits ] ; then
+if [ ! -f data/data_y/mask_planck60LS.fits ] ; then
     python mkfits.py
 fi
 
+predir=pl60LS
+fname_msk=data/data_y/mask_planck60LS.fits
+fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
+prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
+suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
 echo "Compute stacks"
-if [ ! -f output_voids_milca_15/wth_mock_0632.txt ] ; then
+if [ ! -f output_${predir}_voids_milca_20/wth_mock_0632.txt ] ; then
     echo " MILCA stacks"
     fname_y=data/data_y/milca_ymaps.fits
-    fname_msk=data/data_y/mask.fits
-    fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
-    prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
-    suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
-    prefix_out=output_voids_milca
+    prefix_out=output_${predir}_voids_milca
     addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
 fi
-if [ ! -f output_voids_null_15/wth_mock_0632.txt ] ; then
+if [ ! -f output_${predir}_voids_null_20/wth_mock_0632.txt ] ; then
     echo " NULL stacks"
     fname_y=data/data_y/y_null_milca.fits
-    fname_msk=data/data_y/mask.fits
-    fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
-    prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
-    suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
-    prefix_out=output_voids_null
+    prefix_out=output_${predir}_voids_null
     addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
 fi
-if [ ! -f output_voids_545_15/wth_mock_0632.txt ] ; then
+if [ ! -f output_${predir}_voids_nulln_20/wth_mock_0632.txt ] ; then
+    echo " NULL NILC stacks"
+    fname_y=data/data_y/y_null_nilc.fits
+    prefix_out=output_${predir}_voids_nulln
+    addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
+fi
+if [ ! -f output_${predir}_voids_545_20/wth_mock_0632.txt ] ; then
     echo " 545 stacks"
     fname_y=data/HFI_SkyMap_545_2048_R2.02_full.fits
-    fname_msk=data/data_y/mask.fits
-    fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
-    prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
-    suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
-    prefix_out=output_voids_545
+    prefix_out=output_${predir}_voids_545
     addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
 fi
-if [ ! -f output_voids_nilc_15/wth_mock_0632.txt ] ; then
+if [ ! -f output_${predir}_voids_nilc_20/wth_mock_0632.txt ] ; then
     echo " NILC stacks"
     fname_y=data/data_y/nilc_ymaps.fits
-    fname_msk=data/data_y/mask.fits
-    fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
-    prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
-    suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
-    prefix_out=output_voids_nilc
+    prefix_out=output_${predir}_voids_nilc
     addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
 fi
 
