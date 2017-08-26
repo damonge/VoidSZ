@@ -186,7 +186,7 @@ plt.figure()
 ax=plt.gca()
 for r,fmt in zip(r_plot,fmts) :
     mm,nmm,pzz=get_pz(omf(r),olf(r),FB0*omf(r),hhf(r),get_nm=True)
-    plt.plot(mm,nmm/pzz,fmt,lw=2,label='$r/r_v=%.2lf$'%r)
+    plt.plot(mm,nmm/pzz,fmt,lw=2,label='$r/r_v=%.1lf$'%r)
 mm,nmm,pzz=get_pz(omf(4),olf(4),FB0*omf(4),hhf(4),get_nm=True)
 ax.plot(mm,nmm/pzz,'k-',lw=1,label='$r/r_v=\\infty$')
 ax.set_xlim([1E10,5E15])
