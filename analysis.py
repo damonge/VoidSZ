@@ -4,6 +4,7 @@ import scipy.stats as stt
 from scipy.interpolate import interp1d
 import common as cmm
 import sys
+from matplotlib.colors import LinearSegmentedColormap
 
 if len(sys.argv)!=2 :
     print "Usage: analysis.py n_x"
@@ -18,6 +19,7 @@ rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
 #rc('font',**{'family':'serif','serif':['Palatino']})
 rc('text', usetex=True)
 
+#data_milca=cmm.get_run_stats("results_0/output_lens_voids_milca",n_x,n_a,nmocks)
 data_milca=cmm.get_run_stats("output_pl60LS_voids_milca",n_x,n_a,nmocks)
 data_null =cmm.get_run_stats("output_pl60LS_voids_null" ,n_x,n_a,nmocks)
 data_nulln=cmm.get_run_stats("output_pl60LS_voids_nulln",n_x,n_a,nmocks)
@@ -152,11 +154,11 @@ y1f=interp1d(data_545['x'],y1); y1ext=y1f(xext)
 y2f=interp1d(data_545['x'],y2); y2ext=y2f(xext)
 ax.fill_between(xext,y1ext,y2ext,facecolor='#AAAAAA')
 ax.errorbar(data_545['x'],(data_545['w_1d_data']-data_545['w_1d_mean'])*alpha_cib,yerr=data_545['w_1d_error']*alpha_cib,
-            fmt='ko',lw=2,elinewidth=2,ms=4,label='${\\rm Leakage}$')
+            fmt='kD',lw=2,elinewidth=2,ms=4,label='${\\rm Leakage}$')
 ax.errorbar(data_milca['x'],data_milca['w_1d_data']-data_milca['w_1d_mean'],
              yerr=data_milca['w_1d_error'],fmt='ro',lw=2,elinewidth=2,label='$y_{\\rm MILCA}$')
-ax.errorbar(data_nilc['x']+0.01,data_nilc['w_1d_data']-data_nilc['w_1d_mean']-st_nilc['off_bf_o'],
-             yerr=data_nilc['w_1d_error'],fmt='bo',lw=2,elinewidth=2,label='$y_{\\rm NILC}$')
+ax.errorbar(data_nilc['x']+0.02,data_nilc['w_1d_data']-data_nilc['w_1d_mean']-st_nilc['off_bf_o'],
+             yerr=data_nilc['w_1d_error'],fmt='bs',lw=2,elinewidth=2,label='$y_{\\rm NILC}$')
 ax.plot(x_th_f,w_th_f*st_milca['a_bf'],'k--',lw=2,label='$y_{\\rm best-fit}$')
 ax.plot([0,2],[0,0],'k--',lw=1)
 ax.set_ylim([-6.2E-8,6.2E-8])
@@ -177,6 +179,23 @@ aarr=np.radians(np.linspace(0,360,n_a*a_refac))
 xarr=data_milca['x']
 r,theta=np.meshgrid(xarr,aarr)
 
+cdict={'red':  ((0.00,0.00,0.00),
+                (0.25,0.20,0.20),
+                (0.50,1.00,1.00),
+                (0.75,1.00,1.00),
+                (1.00,0.50,0.50)),
+       'green':((0.00,0.00,0.00),
+                (0.25,0.20,0.20),
+                (0.50,1.00,1.00),
+                (0.75,0.40,0.40),
+                (1.00,0.20,0.20)),
+       'blue' :((0.00,0.50,0.50),
+                (0.25,1.00,1.00),
+                (0.50,1.00,1.00),
+                (0.75,0.00,0.00),
+                (1.00,0.00,0.00))}
+cm=LinearSegmentedColormap('BlueRed', cdict)
+
 def plot2d(arr,vmn,vmx) :
     fig,((ax1,ax2),(ax3,ax4))=plt.subplots(2,2,subplot_kw=dict(projection='polar'),figsize=(10,10));
 
@@ -186,7 +205,7 @@ def plot2d(arr,vmn,vmx) :
         arrplot=np.zeros([n_a*a_refac,n_x])
         for i in np.arange(n_a) :
             arrplot[i*a_refac:(i+1)*a_refac,:]=(arr[:,i])[None,:]
-        p=ax.pcolor(theta,r,arrplot,vmin=vmn,vmax=vmx,cmap=plt.get_cmap('seismic'));
+        p=ax.pcolor(theta,r,arrplot,vmin=vmn,vmax=vmx,cmap=cm)#plt.get_cmap('seismic'));
         ipl+=1
     fig.subplots_adjust(right=0.8)
     cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])

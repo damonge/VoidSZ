@@ -112,6 +112,8 @@ fi
 
 predir=pl60LS
 fname_msk=data/data_y/mask_planck60LS.fits
+#predir=lens
+#fname_msk=data/data_y/mask.fits
 fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
 prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
 suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits

@@ -5,6 +5,12 @@ import matplotlib.pyplot as plt
 from scipy.interpolate import interp1d
 from scipy.optimize import brentq
 
+from matplotlib import rc
+rc('font',**{'family':'sans-serif','sans-serif':['Helvetica']})
+## for Palatino and other serif fonts use:
+#rc('font',**{'family':'serif','serif':['Palatino']})
+rc('text', usetex=True)
+
 RHOCRIT0=2.7744948E11
 OM0=0.3
 HH0=0.7
@@ -77,7 +83,7 @@ def get_zeff(om,ol,ok,hh,z0) :
     zeff=brentq(fzero,0.,10.)
     return zeff
 
-def get_pz(om,ol,ob,hh) :
+def get_pz(om,ol,ob,hh,get_nm=False) :
     """Average electron pressure in the relevant redshift range
     for a set of cosmological parameters"""
     pcs=csm.PcsPar()
@@ -100,8 +106,10 @@ def get_pz(om,ol,ob,hh) :
             nmarr[im]=pmean*pcs.mass_function_logarithmic(m,zeff,'Tinker10_200')
         nmf=interp1d(np.log10(marr),nmarr,bounds_error=False,fill_value=0)
         pzarr[iz]=itg.quad(nmf,7.5,LMMAX+0.5)[0]
-    return np.mean(pzarr)
-
+    if get_nm :
+        return marr,nmarr,np.mean(pzarr)
+    else :
+        return np.mean(pzarr)
 
 #Compute mean void radius
 data_ngc_cut=np.genfromtxt('data/voids_BOSS_cmass_dr12v4_ngc_Om0.3_dt0.5.dat',
@@ -167,6 +175,33 @@ omarr=OM0*rhomarr/eta2arr #Effective matter parameter
 olarr=(1-OM0)/eta2arr #Effective cosmological constant
 okarr=1-olarr-omarr #Effective curvature
 harr=HH0*np.sqrt(eta2arr) #Effective expansion rate
+
+
+omf=interp1d(rarr,omarr)
+olf=interp1d(rarr,olarr)
+hhf=interp1d(rarr,harr)
+r_plot=[0.,0.3,0.6,1.0]
+fmts=['r:','r-.','r--','r-']
+plt.figure()
+ax=plt.gca()
+for r,fmt in zip(r_plot,fmts) :
+    mm,nmm,pzz=get_pz(omf(r),olf(r),FB0*omf(r),hhf(r),get_nm=True)
+    plt.plot(mm,nmm/pzz,fmt,lw=2,label='$r/r_v=%.2lf$'%r)
+mm,nmm,pzz=get_pz(omf(4),olf(4),FB0*omf(4),hhf(4),get_nm=True)
+ax.plot(mm,nmm/pzz,'k-',lw=1,label='$r/r_v=\\infty$')
+ax.set_xlim([1E10,5E15])
+ax.set_ylim([0,0.6])
+ax.set_xlabel('$M\\,[h^{-1}\\,M_\\odot]$',fontsize=14)
+ax.set_ylabel('$d\\,\\log\\langle P_e\\rangle/d\\log_{10}M$',fontsize=14)
+ax.set_xscale('log')
+plt.legend(loc='upper left',frameon=False,labelspacing=0.1,fontsize=14,ncol=2)
+for tick in ax.xaxis.get_major_ticks():
+    tick.label.set_fontsize(12)
+for tick in ax.yaxis.get_major_ticks():
+    tick.label.set_fontsize(12)
+plt.savefig('doc/pe_mass.pdf',bbox_inches='tight')
+
+
 parr=np.zeros_like(harr) #This will hold mean electron pressure(r)
 for i in np.arange(len(parr)) :
     parr[i]=get_pz(omarr[i],olarr[i],FB0*omarr[i],harr[i])
