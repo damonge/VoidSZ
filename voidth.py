@@ -181,7 +181,7 @@ omf=interp1d(rarr,omarr)
 olf=interp1d(rarr,olarr)
 hhf=interp1d(rarr,harr)
 r_plot=[0.,0.3,0.6,1.0]
-fmts=['r:','r-.','r--','r-']
+fmts=['r-','r--','r-.','r:']
 plt.figure()
 ax=plt.gca()
 for r,fmt in zip(r_plot,fmts) :
