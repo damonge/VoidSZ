@@ -33,11 +33,31 @@ if [ ! -f HFI_PCCS_SZ-union_R2.08.fits ] ; then
     wget irsa.ipac.caltech.edu/data/Planck/release_2/catalogs/HFI_PCCS_SZ-union_R2.08.fits.gz
     gunzip HFI_PCCS_SZ-union_R2.08.fits.gz
 fi
-#545 map
 cd ../
+#545 map
+if [ ! -f HFI_SkyMap_100_2048_R2.02_full.fits ] ; then
+    echo " Downloading 100 map"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/HFI_SkyMap_100_2048_R2.02_full.fits
+fi
+if [ ! -f HFI_SkyMap_143_2048_R2.02_full.fits ] ; then
+    echo " Downloading 143 map"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/HFI_SkyMap_143_2048_R2.02_full.fits
+fi
+if [ ! -f HFI_SkyMap_217_2048_R2.02_full.fits ] ; then
+    echo " Downloading 217 map"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/HFI_SkyMap_217_2048_R2.02_full.fits
+fi
+if [ ! -f HFI_SkyMap_353_2048_R2.02_full.fits ] ; then
+    echo " Downloading 353 map"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/HFI_SkyMap_353_2048_R2.02_full.fits
+fi
 if [ ! -f HFI_SkyMap_545_2048_R2.02_full.fits ] ; then
     echo " Downloading 545 map"
     wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/HFI_SkyMap_545_2048_R2.02_full.fits
+fi
+if [ ! -f HFI_SkyMap_857_2048_R2.02_full.fits ] ; then
+    echo " Downloading 857 map"
+    wget irsa.ipac.caltech.edu/data/Planck/release_2/all-sky-maps/maps/HFI_SkyMap_857_2048_R2.02_full.fits
 fi
 cd ../
 
@@ -112,8 +132,6 @@ fi
 
 predir=pl60LS
 fname_msk=data/data_y/mask_planck60LS.fits
-#predir=lens
-#fname_msk=data/data_y/mask.fits
 fname_data_voids=data/voids_BOSS_cmass_dr12v4_Om0.3_dt0.5.fits
 prefix_mocks=data/mocks/voids_QPM_a0.6452_dr12c
 suffix_mocks=cmass_zspace_Om0.3_dt0.5.fits
@@ -136,12 +154,15 @@ if [ ! -f output_${predir}_voids_nulln_20/wth_mock_0632.txt ] ; then
     prefix_out=output_${predir}_voids_nulln
     addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
 fi
-if [ ! -f output_${predir}_voids_545_20/wth_mock_0632.txt ] ; then
-    echo " 545 stacks"
-    fname_y=data/HFI_SkyMap_545_2048_R2.02_full.fits
-    prefix_out=output_${predir}_voids_545
-    addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
-fi
+for freq in 100 143 217 353 545 857
+do
+    if [ ! -f output_${predir}_voids_${freq}_20/wth_mock_0632.txt ] ; then
+	echo " ${freq} stacks"
+	fname_y=data/HFI_SkyMap_${freq}_2048_R2.02_full.fits
+	prefix_out=output_${predir}_voids_${freq}
+	addqueue -q cmb -s -n 1x12 -m 1 /usr/local/shared/python/2.7.6-gcc/bin/python run_corr.py ${fname_y} ${fname_msk} ${fname_data_voids} ${prefix_mocks} ${suffix_mocks} ${prefix_out}
+    fi
+done
 if [ ! -f output_${predir}_voids_nilc_20/wth_mock_0632.txt ] ; then
     echo " NILC stacks"
     fname_y=data/data_y/nilc_ymaps.fits
