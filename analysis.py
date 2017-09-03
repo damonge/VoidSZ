@@ -169,7 +169,7 @@ for tick in ax.xaxis.get_major_ticks():
     tick.label.set_fontsize(12)
 for tick in ax.yaxis.get_major_ticks():
     tick.label.set_fontsize(12)
-plt.legend(loc='lower right',frameon=False,fontsize=16,ncol=2)
+plt.legend(loc='lower right',frameon=False,fontsize=14,ncol=1)
 plt.savefig("doc/y_syst.pdf",bbox_inches='tight')
 
 #Plot 2D stacks
