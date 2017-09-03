@@ -136,7 +136,7 @@ ax.text(0.1,4.5E-8,'$\\alpha_v=%.2lf\\pm%.2lf$'%(st_milca['a_bf'],st_milca['a_er
 ax.set_ylim([-6.2E-8,6.2E-8])
 ax.set_xlim([0,2])
 ax.set_xlabel("$\\theta/\\theta_v$",fontsize=14)
-ax.set_ylabel("$\\langle y(\\theta)\\rangle$",fontsize=14)
+ax.set_ylabel("$\\bar{y}(\\theta)$",fontsize=14)
 for tick in ax.xaxis.get_major_ticks():
     tick.label.set_fontsize(12)
 for tick in ax.yaxis.get_major_ticks():
@@ -159,12 +159,12 @@ ax.errorbar(data_milca['x'],data_milca['w_1d_data']-data_milca['w_1d_mean'],
              yerr=data_milca['w_1d_error'],fmt='ro',lw=2,elinewidth=2,label='$y_{\\rm MILCA}$')
 ax.errorbar(data_nilc['x']+0.02,data_nilc['w_1d_data']-data_nilc['w_1d_mean']-st_nilc['off_bf_o'],
              yerr=data_nilc['w_1d_error'],fmt='bs',lw=2,elinewidth=2,label='$y_{\\rm NILC}$')
-ax.plot(x_th_f,w_th_f*st_milca['a_bf'],'k--',lw=2,label='$y_{\\rm best-fit}$')
+ax.plot(x_th_f,w_th_f*st_milca['a_bf'],'k-',lw=2,label='${\\rm best\\,\\,fit\\,\\,MILCA}$')
 ax.plot([0,2],[0,0],'k--',lw=1)
 ax.set_ylim([-6.2E-8,6.2E-8])
 ax.set_xlim([0,2])
 ax.set_xlabel("$\\theta/\\theta_v$",fontsize=14)
-ax.set_ylabel("$\\langle y(\\theta)\\rangle$",fontsize=14)
+ax.set_ylabel("$\\bar{y}(\\theta)$",fontsize=14)
 for tick in ax.xaxis.get_major_ticks():
     tick.label.set_fontsize(12)
 for tick in ax.yaxis.get_major_ticks():
