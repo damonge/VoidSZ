@@ -1,6 +1,6 @@
 # Void - tSZ cross correlation
 
-This repository contains the full analysis pipeline used in INSERT_ARXIV_ID_HERE.
+This repository contains the full analysis pipeline used in https://arxiv.org/abs/1709.01489.
 
 To reproduce the results in the paper:
 1. Compile the stacking code by typing 'make' (this may require modifying Makefile to include the correct paths to the FITS and HEALPix libraries).
