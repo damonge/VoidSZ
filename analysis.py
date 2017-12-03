@@ -155,13 +155,13 @@ ax.plot([0,2],[0,0],'k--',lw=1)
 ax.text(0.1,4.5E-8,'$\\alpha_v=%.2lf\\pm%.2lf$'%(st_milca['a_bf'],st_milca['a_err']),fontsize=18)
 ax.set_ylim([-6.2E-8,6.2E-8])
 ax.set_xlim([0,2])
-ax.set_xlabel("${\\rm Distance\\,\\,to\\,\\,void\\,\\,centre}$",fontsize=15)
-ax.set_ylabel("${\\rm Mean\\,\\,tSZ\\,\\,signal}$",fontsize=15)
+ax.set_xlabel("${\\rm Distance\\,\\,to\\,\\,void\\,\\,centre}$",fontsize=17)
+ax.set_ylabel("${\\rm Mean\\,\\,tSZ\\,\\,signal}$",fontsize=17)
 for tick in ax.xaxis.get_major_ticks():
-    tick.label.set_fontsize(13)
+    tick.label.set_fontsize(14)
 for tick in ax.yaxis.get_major_ticks():
-    tick.label.set_fontsize(13)
-plt.legend(loc='lower right',frameon=False,fontsize=16)#,ncol=2)
+    tick.label.set_fontsize(14)
+plt.legend(loc='lower right',frameon=False,fontsize=17)#,ncol=2)
 plt.savefig("doc/y_simple.pdf",bbox_inches='tight')
 
 #Systematics plot
