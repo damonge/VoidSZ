@@ -144,6 +144,26 @@ for tick in ax.yaxis.get_major_ticks():
 plt.legend(loc='lower right',frameon=False,fontsize=16)#,ncol=2)
 plt.savefig("doc/y_result.pdf",bbox_inches='tight')
 
+#Simplified version
+plt.figure()
+ax=plt.gca()
+ax.errorbar(data_milca['x'],data_milca['w_1d_data']-data_milca['w_1d_mean'],
+             yerr=data_milca['w_1d_error'],fmt='ro',lw=2,elinewidth=2,label='${\\rm Data}$')
+ax.plot(x_th_f,w_th_f                 ,'k--',lw=2,label='${\\rm Fiducial\\,\\,model}$')
+ax.plot(x_th_f,w_th_f*st_milca['a_bf'],'k-' ,lw=2,label='${\\rm Best-fit\\,\\,model}$')
+ax.plot([0,2],[0,0],'k--',lw=1)
+ax.text(0.1,4.5E-8,'$\\alpha_v=%.2lf\\pm%.2lf$'%(st_milca['a_bf'],st_milca['a_err']),fontsize=18)
+ax.set_ylim([-6.2E-8,6.2E-8])
+ax.set_xlim([0,2])
+ax.set_xlabel("${\\rm Distance\\,\\,to\\,\\,void\\,\\,centre}$",fontsize=15)
+ax.set_ylabel("${\\rm Mean\\,\\,tSZ\\,\\,signal}$",fontsize=15)
+for tick in ax.xaxis.get_major_ticks():
+    tick.label.set_fontsize(13)
+for tick in ax.yaxis.get_major_ticks():
+    tick.label.set_fontsize(13)
+plt.legend(loc='lower right',frameon=False,fontsize=16)#,ncol=2)
+plt.savefig("doc/y_simple.pdf",bbox_inches='tight')
+
 #Systematics plot
 plt.figure()
 ax=plt.gca()
