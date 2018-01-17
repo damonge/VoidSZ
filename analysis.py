@@ -28,6 +28,7 @@ data_545  =cmm.get_run_stats("output_pl60LS_voids_545"  ,n_x,n_a,nmocks)
 x_th_f,w_th_f,dum=np.loadtxt("data/data_y/y_th_void.txt",unpack=True)
 wthf=interp1d(x_th_f,w_th_f)
 
+
 alpha_cib,s_alpha_cib,alpha_gal,s_alpha_gal=np.loadtxt("data/data_y/y_contamination.txt")
 w_th=wthf(data_milca['x'])
 
@@ -141,7 +142,7 @@ for tick in ax.xaxis.get_major_ticks():
     tick.label.set_fontsize(12)
 for tick in ax.yaxis.get_major_ticks():
     tick.label.set_fontsize(12)
-plt.legend(loc='lower right',frameon=False,fontsize=16)#,ncol=2)
+plt.legend(loc='lower right',frameon=False,fontsize=16,ncol=2)
 plt.savefig("doc/y_result.pdf",bbox_inches='tight')
 
 #Simplified version
@@ -172,6 +173,7 @@ y2=np.minimum((data_545['w_1d_data']-data_545['w_1d_mean'])*(alpha_cib+s_alpha_c
 xext=np.linspace(data_545['x'][0],data_545['x'][-1],len(data_545['x'])-1)
 y1f=interp1d(data_545['x'],y1); y1ext=y1f(xext)
 y2f=interp1d(data_545['x'],y2); y2ext=y2f(xext)
+ax.plot(data_milca['x'],data_milca['w_1d_mean'],'y-',lw=2,alpha=0.5)
 ax.fill_between(xext,y1ext,y2ext,facecolor='#AAAAAA')
 ax.errorbar(data_545['x'],(data_545['w_1d_data']-data_545['w_1d_mean'])*alpha_cib,yerr=data_545['w_1d_error']*alpha_cib,
             fmt='kD',lw=2,elinewidth=2,ms=4,label='${\\rm Leakage}$')
@@ -179,7 +181,10 @@ ax.errorbar(data_milca['x'],data_milca['w_1d_data']-data_milca['w_1d_mean'],
              yerr=data_milca['w_1d_error'],fmt='ro',lw=2,elinewidth=2,label='$y_{\\rm MILCA}$')
 ax.errorbar(data_nilc['x']+0.02,data_nilc['w_1d_data']-data_nilc['w_1d_mean']-st_nilc['off_bf_o'],
              yerr=data_nilc['w_1d_error'],fmt='bs',lw=2,elinewidth=2,label='$y_{\\rm NILC}$')
-ax.plot(x_th_f,w_th_f*st_milca['a_bf'],'k-',lw=2,label='${\\rm best\\,\\,fit\\,\\,MILCA}$')
+ax.plot(x_th_f,w_th_f*st_milca['a_bf'],'k-',lw=2)
+
+ax.plot([-1,-1],[-1,-1],'y-',lw=2,alpha=0.5,label='$\\langle y\\rangle_{\\rm mocks}$')
+ax.plot([-1,-1],[-1,-1],'k-',lw=2,label='$\\alpha_v\\,y_{\\rm model}$')
 ax.plot([0,2],[0,0],'k--',lw=1)
 ax.set_ylim([-6.2E-8,6.2E-8])
 ax.set_xlim([0,2])
@@ -189,7 +194,8 @@ for tick in ax.xaxis.get_major_ticks():
     tick.label.set_fontsize(12)
 for tick in ax.yaxis.get_major_ticks():
     tick.label.set_fontsize(12)
-plt.legend(loc='lower right',frameon=False,fontsize=14,ncol=1)
+handles, labels = ax.get_legend_handles_labels()
+ax.legend(handles[::-1], labels[::-1],loc='lower right',frameon=False,fontsize=14,ncol=2)
 plt.savefig("doc/y_syst.pdf",bbox_inches='tight')
 
 #Plot 2D stacks

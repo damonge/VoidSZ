@@ -206,6 +206,37 @@ parr=np.zeros_like(harr) #This will hold mean electron pressure(r)
 for i in np.arange(len(parr)) :
     parr[i]=get_pz(omarr[i],olarr[i],FB0*omarr[i],harr[i])
 parr*=harr/harr[-1] #Correct for h-inverse units
+
+#Plot void quantities
+fig=plt.figure(figsize=(6.5,8))
+plt.subplots_adjust(hspace=0)
+ax1=plt.subplot(3,1,1)
+ax1.plot(rarrt,darrt,'k--',label='$1+\\delta_g$')
+ax1.plot(rarrt,(darrt-1)/B_CMASS+1,'k-',label='$1+\\delta_M$')
+ax1.set_xlim([0,2])
+ax1.get_xaxis().set_ticks([])
+ax1.set_ylabel('$1+\\delta$',fontsize=14)
+plt.legend(loc='lower right',frameon=False,fontsize=14)
+for tick in ax1.yaxis.get_major_ticks():
+    tick.label.set_fontsize(12)
+ax2=plt.subplot(3,1,2)
+ax2.plot(rarr,harr/harr[-1],'k-',label='$H_0(r)/H_0(r=\\infty)$')
+ax2.set_xlim([0,2])
+ax2.get_xaxis().set_ticks([])
+ax2.set_ylabel('$H_0(r)/H_0(r=\\infty)$',fontsize=14)
+for tick in ax2.yaxis.get_major_ticks():
+    tick.label.set_fontsize(12)
+ax3=plt.subplot(3,1,3)
+ax3.plot(rarr,parr/parr[-1],'k-',label='P_e(r)/P_e(r=\\infty)$')
+ax3.set_xlim([0,2])
+for tick in ax3.xaxis.get_major_ticks():
+    tick.label.set_fontsize(12)
+for tick in ax3.yaxis.get_major_ticks():
+    tick.label.set_fontsize(12)
+ax3.set_xlabel('$r/r_v$',fontsize=14)
+ax3.set_ylabel('$P_e(r)/P_e(r=\\infty)$',fontsize=14)
+plt.savefig('doc/void_profiles.pdf',bbox_inches='tight')
+
 parr-=parr[-1] #Subtract background (which we don't measure)
 
 #Integrate pressure profile along the line of sight
